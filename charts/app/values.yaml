@@ -1,0 +1,16 @@
+namespace: task-manager
+
+replicaCount: 1
+
+image:
+  repository: 207933152802.dkr.ecr.ap-south-1.amazonaws.com/task-manager
+  tag: latest
+
+mongoUri: "mongodb://root:secret123@mongodb-service:27017/taskdb/?authSource=admin"
+
+flaskEnv: "production"
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 5000

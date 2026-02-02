@@ -1,0 +1,42 @@
+# Default values for task-manager-umbrella.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+replicaCount: 1
+
+mongodb:
+  architecture: replicaset
+
+  image:
+    tag: latest
+
+  replicaCount: 3
+  replicaSetName: rs0
+  arbiter:
+    enabled: false
+
+  auth:
+    enabled: true
+    rootUser: root
+    rootPassword: secret123
+    usernames: []  
+    databases: []   
+ 
+  persistence:
+    enabled: true
+    storageClass: gp2
+    size: 0.5Gi
+
+app:
+  replicaCount: 1
+  namespace: task-manager
+  image:
+    repository: 207933152802.dkr.ecr.ap-south-1.amazonaws.com/task-manager
+    tag: latest
+  mongoUri: "mongodb://root:secret123@task-manager-mongodb-headless:27017/taskdb?authSource=admin"
+  flaskEnv: "production"
+  service:
+    type: LoadBalancer
+    port: 80
+    targetPort: 5000
